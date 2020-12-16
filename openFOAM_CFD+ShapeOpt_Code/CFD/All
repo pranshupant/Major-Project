@@ -1,0 +1,43 @@
+#!/bin/sh
+#
+#-------------------------------------------------#
+# Contributor: Joe & Pranshu                      #
+# Updated on:  16 March 2018                      #
+#-------------------------------------------------#
+# Topic:       Rotating AMI within a VAWT         #
+# OpenFOAM:    5.x                                #
+#-------------------------------------------------#
+
+#------------------------------------------------------------------------------
+cd ${0%/*} || exit 1
+#clear
+
+
+##  MESHING ##
+#------------------------------------------------------------------------------
+	./Allclean
+	cd PythonCodes
+	python ./time.py
+	python ./time.py
+	python ./stl_gen.py	
+	cd ..
+	#cp -r dynamicCode.orig dynamicCode	
+	blockMesh >> logMeshing
+	snappyHexMesh -overwrite >> logMeshing
+	extrudeMesh >> logMeshing
+	createPatch -overwrite  >> logMeshing
+	rm -rf 0 constant/polyMesh/sets
+	cp -r 0.orig 0	
+	cd PythonCodes
+	python ./time.py
+	python ./time.py
+	cd ..
+	pimpleDyMFoam >> logSimulation
+	cd PythonCodes
+	python ./time.py	
+	python ./post_Processing.py	
+	python ./time.py
+	python ./time.py	
+	cd ..
+
+

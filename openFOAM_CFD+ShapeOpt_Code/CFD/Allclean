@@ -1,0 +1,13 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+
+#. $WM_PROJECT_DIR/bin/tools/CleanFunctions
+. /opt/openfoam5/bin/tools/CleanFunctions
+
+
+
+cleanCase
+rm -rf 0 log* 
+rm -rf constant/triSurface/VAWT*.stl
+rm -rf PythonCodes/run PythonCodes/runTime 
